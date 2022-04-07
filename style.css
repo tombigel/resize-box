@@ -24,7 +24,7 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
     position: relative;
     left: 50%;
     width: 50%;
-    height: 100%;
+    height: calc(100% - 1.3em);
     background-color: blanchedalmond;
 }
 
@@ -39,7 +39,7 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
 
     top: 400px;
     left: 400px;
-} 
+}
 
 .resizable-box {
     position: absolute;
