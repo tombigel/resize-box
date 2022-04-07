@@ -52,6 +52,7 @@ or
 ```css
 @import url(https://tombigel.github.io/resize-box/index.css);
 ```
+
 All the handles are optional and are placed anf act by their `data-handle` name
 
 `container` has to be an 'offset parent'
