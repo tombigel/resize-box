@@ -1,6 +1,7 @@
 /*
  * Draggable Text Box
  */
+@import url(./index.css);
 
  body, html{
      height: 100%;
@@ -11,19 +12,6 @@
      position: absolute;
      bottom: 4px;
  }
-
- /* Prevent drag, I think it works...
-https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
-*,
-*::after,
-*::before {
-    -webkit-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-app-region: no-drag;
-    user-select: none;
-    /* user-drag: none;
-    app-region: no-drag; */
-}
 
 .stage {
     position: relative;
@@ -44,82 +32,4 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
 
     top: 400px;
     left: 400px;
-}
-
-.resizable-box {
-    --box-color: hsl(214, 100%, 50%);
-    position: absolute;
-    outline: 1px solid var(--box-color);
-    cursor: move;
-}
-
-.resizable-box-handle {
-    --handle-width: 13px;
-    --handle-height: 13px;
-    color: var(--box-color);
-    position: absolute;
-    width: var(--handle-width);
-    height: var(--handle-height);
-    border-radius: 50%;
-    background: white;
-    margin: -6px;
-    box-sizing: border-box;
-    border: 3px solid currentColor;
-}
-
-[data-dragging-within] {
-    cursor: grabbing;
-}
-
-[data-dragging] {
-    z-index: 1;
-    --box-color:  hsl(204, 100%, 50%);
-}
-
-[data-handle*="top"] {
-    top: 0;
-}
-:where([data-handle*="top"]) {
-    left: 50%;
-    cursor: n-resize;
-}
-
-[data-handle*="left"] {
-    left: 0;
-}
-:where([data-handle*="left"]) {
-    top: 50%;
-    cursor: w-resize
-}
-
-[data-handle*="bottom"] {
-    top: 100%;
-}
-:where([data-handle*="bottom"]) {
-    left: 50%;
-    cursor: s-resize;
-}
-
-[data-handle*="right"] {
-    left: 100%;
-}
-:where([data-handle*="right"]) {
-    top: 50%;
-    cursor: e-resize;
-}
-
-[data-handle*="top"][data-handle*="left"] {
-    cursor: nw-resize;
-}
-
-[data-handle*="top"][data-handle*="right"] {
-    cursor: ne-resize;
-}
-
-[data-handle*="bottom"][data-handle*="right"] {
-    cursor: se-resize;
-}
-
-[data-handle*="bottom"][data-handle*="left"] {
-    cursor: sw-resize;
 }
