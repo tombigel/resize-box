@@ -1,0 +1,114 @@
+/*
+ * Draggable Text Box
+ */
+
+ body, html{
+     height: 100%;
+     min-height: 100%;
+ }
+
+ /* Prevent drag, I think it works...
+https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
+*,
+*::after,
+*::before {
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+    user-select: none;
+    /* user-drag: none;
+    app-region: no-drag; */
+}
+
+.stage {
+    position: relative;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    background-color: blanchedalmond;
+}
+
+#box1 {
+    width: 200px;
+    height: 200px;
+}
+
+#box2 {
+    width: 200px;
+    height: 200px;
+
+    top: 400px;
+    left: 400px;
+} 
+
+.resizable-box {
+    position: absolute;
+    outline: 1px solid hsl(214, 100%, 50%);
+    cursor: move;
+}
+
+.resizable-box-handle {
+    --handle-width: 13px;
+    --handle-height: 13px;
+    color: hsl(214, 100%, 50%);
+    position: absolute;
+    width: var(--handle-width);
+    height: var(--handle-height);
+    border-radius: 50%;
+    background: white;
+    margin: -6px;
+    box-sizing: border-box;
+    border: 3px solid currentColor;
+}
+
+[data-dragging] {
+    cursor: grabbing;
+}
+
+[data-handle*="top"] {
+    top: 0;
+}
+:where([data-handle*="top"]) {
+    left: 50%;
+    cursor: n-resize;
+}
+
+[data-handle*="left"] {
+    left: 0;
+}
+:where([data-handle*="left"]) {
+    top: 50%;
+    cursor: w-resize
+}
+
+[data-handle*="bottom"] {
+    top: 100%;
+}
+:where([data-handle*="bottom"]) {
+    left: 50%;
+    cursor: s-resize;
+}
+
+[data-handle*="right"] {
+    left: 100%;
+}
+:where([data-handle*="right"]) {
+    top: 50%;
+    cursor: e-resize;
+}
+
+[data-handle*="top"][data-handle*="left"] {
+    cursor: nw-resize;
+}
+
+[data-handle*="top"][data-handle*="right"] {
+    cursor: ne-resize;
+}
+
+[data-handle*="bottom"][data-handle*="right"] {
+    cursor: se-resize;
+}
+
+[data-handle*="bottom"][data-handle*="left"] {
+    cursor: sw-resize;
+}
