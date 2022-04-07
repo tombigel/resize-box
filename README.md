@@ -2,7 +2,13 @@
 
 ## Usage
 
-Execute this function
+Import the code
+
+```typescript
+import { setResizableBoxEvents } from 'https://tombigel.github.io/resize-box/index.js';
+```
+
+Init the code with some options
 
 ```typescript
 setResizableBoxEvents(
@@ -18,12 +24,11 @@ setResizableBoxEvents(
 ): void;
 ```
 
-On HTML that looks like this:
+HTML Structure:
 
 ```html
 <div class="resizable-box">
     <div class="content">
-        Container: BODY
     </div>
     <div class="resizable-box-handle" data-handle="top left"></div>
     <div class="resizable-box-handle" data-handle="top right"></div>
@@ -36,6 +41,17 @@ On HTML that looks like this:
 </div>
 ```
 
+CSS:
+
+```html
+<link rel="stylesheet" href="https://tombigel.github.io/resize-box/index.css">
+```
+
+or
+
+```css
+@import url(https://tombigel.github.io/resize-box/index.css);
+```
 All the handles are optional and are placed anf act by their `data-handle` name
 
 `container` has to be an 'offset parent'
