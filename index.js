@@ -75,14 +75,16 @@ export function setResizableBoxEvents(
                 const corner = event.target.dataset.handle || '';
                 const handleMove = moveBox.bind(null, box, corner, rects);
 
-                container.dataset.dragging = 'true';
+                container.dataset.draggingWithin = 'true';
+                box.dataset.dragging = 'true';
 
                 container.setPointerCapture(event.pointerId);
                 container.addEventListener('pointermove', handleMove);
                 container.addEventListener(
                     'pointerup',
                     function handlePointerUp(e) {
-                        delete container.dataset.dragging;
+                        delete container.dataset.draggingWithin;
+                        delete box.dataset.dragging;
 
                         if (form) {
                             // Save box dimensions

@@ -7,6 +7,11 @@
      min-height: 100%;
  }
 
+ aside{
+     position: absolute;
+     bottom: 4px;
+ }
+
  /* Prevent drag, I think it works...
 https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
 *,
@@ -24,7 +29,7 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
     position: relative;
     left: 50%;
     width: 50%;
-    height: calc(100% - 1.3em);
+    height: 100%;
     background-color: blanchedalmond;
 }
 
@@ -42,15 +47,16 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
 }
 
 .resizable-box {
+    --box-color: hsl(214, 100%, 50%);
     position: absolute;
-    outline: 1px solid hsl(214, 100%, 50%);
+    outline: 1px solid var(--box-color);
     cursor: move;
 }
 
 .resizable-box-handle {
     --handle-width: 13px;
     --handle-height: 13px;
-    color: hsl(214, 100%, 50%);
+    color: var(--box-color);
     position: absolute;
     width: var(--handle-width);
     height: var(--handle-height);
@@ -61,8 +67,13 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
     border: 3px solid currentColor;
 }
 
-[data-dragging] {
+[data-dragging-within] {
     cursor: grabbing;
+}
+
+[data-dragging] {
+    z-index: 1;
+    --box-color: hsl(100, 100%, 50%);
 }
 
 [data-handle*="top"] {
