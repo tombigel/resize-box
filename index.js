@@ -37,11 +37,14 @@ export function setResizableBoxEvents(
         min: {},
         max: {},
     };
-    if (form && form.elements['y'].value) {
-        box.style.top = form.elements['y'].value;
-        box.style.left = form.elements['x'].value;
-        box.style.width = form.elements['w'].value;
-        box.style.height = form.elements['h'].value;
+    if (form){
+        form.addEventListener('submit', e => e.preventDefault());
+        if (form.elements['y'].value) {
+            box.style.top = form.elements['y'].value;
+            box.style.left = form.elements['x'].value;
+            box.style.width = form.elements['w'].value;
+            box.style.height = form.elements['h'].value;
+        }
     }
 
     handles.forEach((handle) => {
@@ -161,7 +164,7 @@ function moveBox(box, corner, rects, { offsetX, offsetY }) {
 /**
  * Limit a number between 2 values, inclusive
  * @param {number} min
- * @param {number} max
+ * @param {number} [max]
  * @param {number} num
  * @returns {number}
  */

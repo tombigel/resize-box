@@ -6,7 +6,11 @@ function init() {
         const container =
             box.dataset.resizableContainer &&
             document.getElementById(box.dataset.resizableContainer);
-        const form = undefined; //document.forms[0];
+
+        const form =
+            box.dataset.resizableForm &&
+            document.getElementById(box.dataset.resizableForm);
+
         setResizableBoxEvents(box, { container, form });
     }
 }

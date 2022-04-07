@@ -10,7 +10,7 @@
 <body>
     <section class="stage" id="stage">
 
-        <div class="resizable-box" data-resizable id="box1">
+        <div class="resizable-box" data-resizable data-resizable-form="form" id="box1">
             <div class="content">
                 Container: BODY
             </div>
@@ -22,6 +22,10 @@
             <div class="resizable-box-handle" data-handle="right"></div>
             <div class="resizable-box-handle" data-handle="bottom"></div>
             <div class="resizable-box-handle" data-handle="left"></div>
+            <input form="form" type="hidden" name="x"></input>
+            <input form="form" type="hidden" name="y"></input>
+            <input form="form" type="hidden" name="w"></input>
+            <input form="form" type="hidden" name="h"></input>
         </div>
 
         <div class="resizable-box" data-resizable data-resizable-container="stage" id="box2">
@@ -36,7 +40,7 @@
 
     </section>
     <aside>Code: <a href="https://github.com/tombigel/resize-box">https://github.com/tombigel/resize-box</a></aside>
-    <form name="form"></form>
+    <form name="form" id="form"></form>
     <script src="./script.js" type="module"></script>
 </body>
 </html>

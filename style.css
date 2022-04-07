@@ -73,7 +73,7 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
 
 [data-dragging] {
     z-index: 1;
-    --box-color: hsl(100, 100%, 50%);
+    --box-color:  hsl(204, 100%, 50%);
 }
 
 [data-handle*="top"] {
