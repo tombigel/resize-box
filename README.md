@@ -20,6 +20,9 @@ setResizableBoxEvents(
         minHeight = 10: number,
         maxWidth = container.offsetWidth: number,
         maxHeight = container.offsetHeight: number,
+        onStart: (e: PointerEvent) => void,
+        onMove: (e: PointerEvent) => void,
+        onEnd: (e: PointerEvent) => void,
     } 
 ): void;
 ```
