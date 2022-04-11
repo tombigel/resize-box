@@ -11,6 +11,9 @@ import formRequestSubmitPolyfill from 'https://cdn.skypack.dev/pin/form-request-
  * @param {number} [options.minHeight = 10]
  * @param {number} [options.maxWidth = container.offsetWidth]
  * @param {number} [options.maxHeight = container.offsetHeight]
+ * @param {(e: PointerEvent) => void} [onStart]
+ * @param {(e: PointerEvent) => void} [onMove]
+ * @param {(e: PointerEvent) => void} [onEnd]
  */
 export function setResizableBoxEvents(
     box,
@@ -21,6 +24,9 @@ export function setResizableBoxEvents(
         minHeight = 10,
         maxWidth = container.offsetWidth,
         maxHeight = container.offsetHeight,
+        onStart,
+        onMove,
+        onEnd
     } = {}
 ) {
     const handles = [...box.querySelectorAll('[data-handle]'), box];
@@ -76,16 +82,21 @@ export function setResizableBoxEvents(
                     height: maxHeight,
                 };
                 const corner = event.target.dataset.handle || '';
-                const handleMove = moveBox.bind(null, box, corner, rects);
+                const handleMove = moveBox.bind(null, box, corner, rects, onMove);
 
                 container.dataset.draggingWithin = 'true';
                 box.dataset.dragging = 'true';
+
+                if (onStart) {
+                    onStart(event)
+                }
 
                 container.setPointerCapture(event.pointerId);
                 container.addEventListener('pointermove', handleMove);
                 container.addEventListener(
                     'pointerup',
                     function handlePointerUp(e) {
+                        e.preventDefault();
                         delete container.dataset.draggingWithin;
                         delete box.dataset.dragging;
 
@@ -106,6 +117,10 @@ export function setResizableBoxEvents(
                             'pointermove',
                             handleMove
                         );
+
+                        if (onEnd) {
+                            onEnd(e)
+                        }
                     }
                 );
             },
@@ -114,7 +129,13 @@ export function setResizableBoxEvents(
     });
 }
 
-function moveBox(box, corner, rects, { offsetX, offsetY }) {
+function moveBox(box, corner, rects, { offsetX, offsetY }, onMove, event) {
+    event.preventDefault();
+
+    console.log(offsetX, offsetY)
+    if (!offsetX && !offsetY) {
+        return;
+    }
     offsetX -= rects.diff.left;
     offsetY -= rects.diff.top;
     const calculated = { ...rects.initial };
@@ -159,6 +180,10 @@ function moveBox(box, corner, rects, { offsetX, offsetY }) {
     box.style.left = `${left}px`;
     box.style.width = `${width}px`;
     box.style.height = `${height}px`;
+
+    if (onMove) {
+        onMove(event)
+    }
 }
 
 /**
