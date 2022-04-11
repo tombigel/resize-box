@@ -129,16 +129,18 @@ export function setResizableBoxEvents(
     });
 }
 
-function moveBox(box, corner, rects, { offsetX, offsetY }, onMove, event) {
+function moveBox(box, corner, rects, onMove, event) {
+    const { offsetX, offsetY } = event;
+    const calculated = { ...rects.initial };
+
     event.preventDefault();
 
-    console.log(offsetX, offsetY)
     if (!offsetX && !offsetY) {
         return;
     }
+
     offsetX -= rects.diff.left;
     offsetY -= rects.diff.top;
-    const calculated = { ...rects.initial };
 
     if (corner.includes('top')) {
         calculated.top = Math.min(
