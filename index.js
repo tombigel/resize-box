@@ -130,7 +130,7 @@ export function setResizableBoxEvents(
 }
 
 function moveBox(box, corner, rects, onMove, event) {
-    const { offsetX, offsetY } = event;
+    let { offsetX, offsetY } = event;
     const calculated = { ...rects.initial };
 
     event.preventDefault();
