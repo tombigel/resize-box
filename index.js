@@ -160,7 +160,9 @@ function moveBox(box, corner, rects, onMove, event) {
         calculated.width = rects.initial.width + rects.initial.left - offsetX;
     } else if (corner.includes('right')) {
         calculated.width = offsetX - rects.initial.left;
-    } else {
+    }
+
+    if (!corner) {
         calculated.top = offsetY - rects.start.top;
         calculated.left = offsetX - rects.start.left;
     }
