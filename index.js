@@ -46,10 +46,10 @@ export function setResizableBoxEvents(
     if (form){
         form.addEventListener('submit', e => e.preventDefault());
         if (form.elements['y'].value) {
-            box.style.top = form.elements['y'].value;
-            box.style.left = form.elements['x'].value;
-            box.style.width = form.elements['w'].value;
-            box.style.height = form.elements['h'].value;
+            box.style.top = `${form.elements['y'].value}px`;
+            box.style.left = `${form.elements['x'].value}px`;
+            box.style.width = `${form.elements['w'].value}px`;
+            box.style.height = `${form.elements['h'].value}px`;
         }
     }
 
@@ -102,10 +102,10 @@ export function setResizableBoxEvents(
 
                         if (form) {
                             // Save box dimensions
-                            form.elements['y'].value = box.style.top;
-                            form.elements['x'].value = box.style.left;
-                            form.elements['w'].value = box.style.width;
-                            form.elements['h'].value = box.style.height;
+                            form.elements['y'].value = box.offsetTop;
+                            form.elements['x'].value = box.offsetLeft;
+                            form.elements['w'].value = box.offsetWidth;
+                            form.elements['h'].value = box.offsetHeight;
                             form.requestSubmit();
                         }
 
