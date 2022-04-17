@@ -191,11 +191,13 @@ function moveBox(box, corner, rects, onMove, event) {
 }
 
 /**
- * Limit a number between 2 values, inclusive
- * @param {number} min
- * @param {number} [max]
- * @param {number} num
+ * Limit a number between 2 values, inclusive, order doesn't matter
+ * @param {number} n1
+ * @param {number} n2
+ * @param {number} n3
  * @returns {number}
  */
-export const clamp = (min, max = min, num = max) =>
-    Math.min(max, Math.max(min, num));
+export const clamp = (n1, n2 = n1, n3 = n2) => {
+    const [min, num, max] = [n1, n2, n3].sort((a, b)=>  a - b);
+    return Math.min(max, Math.max(min, num));
+}
