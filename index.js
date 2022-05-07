@@ -1,6 +1,3 @@
-// polyfill for form.requestSubmit in Safari, should be removed when the feature is enabled https://bugs.webkit.org/show_bug.cgi?id=197958
-import formRequestSubmitPolyfill from 'https://cdn.skypack.dev/pin/form-request-submit-polyfill@v2.0.0-szOipIemxchOslzcqvLN/mode=imports,min/optimized/form-request-submit-polyfill.js';
-
 const S4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 const randomUUIDDumbPolyfill = () => `${S4()}${S4()}-${S4()}-${S4()}-${S4()}-${S4()}${S4()}${S4()}`;
 const randomId = () => crypto.randomUUID?.() || randomUUIDDumbPolyfill();
@@ -121,7 +118,6 @@ export function createDocumentWireframe(elementsListOrSelector) {
  * @param {object} options
  * @param {'all' | 'sides' | 'corners' | 'corners-aspect'} [options.resize] resize handles
  * @param {string} [options.container] An id for a bounding container, defaults to document.body
- * @param {string} [options.form] An id for a form to save the box dimentsions state
  * @param {number} [options.minWidth = 10]
  * @param {number} [options.minHeight = 10]
  * @param {number} [options.maxWidth = container.offsetWidth]
@@ -135,7 +131,6 @@ export function makeWireframeElementResizable(
     {
         resize = 'all', // all | sides | corners | corners-aspect
         container, // optional containerr id to be raltive to
-        form, // optional form name
         ...rest
     } = {}
 ) {
@@ -174,22 +169,13 @@ export function makeWireframeElementResizable(
         wire.dataset.resizableAspect = 'keep';
     }
 
-    if (form) {
-        wire.dataset.resizableForm = form;
-        wire.innerHTML += `
-<input form="${form}" type="hidden" name="x"></input>
-<input form="${form}" type="hidden" name="y"></input>
-<input form="${form}" type="hidden" name="w"></input>
-<input form="${form}" type="hidden" name="h"></input>`;
-    }
-
     setResizableBoxEvents(wire, rest);
 }
 
 /**
  * Stage editbox interaction logic, expects a specific HTML structure:
  * @example
- * <div data-resizable-form="form" data-resizable-container="container" data-resizable-aspect="keep">
+ * <div data-resizable-container="container" data-resizable-aspect="keep">
  *    Some content...
  *    <div class="resizable-box-handle" data-handle="top-left"></div>
  *    <div class="resizable-box-handle" data-handle="top-right"></div>
@@ -217,7 +203,6 @@ export function setResizableBoxEvents(
     { minWidth = 10, minHeight = 10, maxWidth, maxHeight, onStart, onMove, onEnd } = {}
 ) {
     const container = document.getElementById(box.dataset.resizableContainer) || document.body;
-    const form = box.dataset.resizableForm && document.getElementById(box.dataset.resizableForm);
 
     //TODO - implement
     const keepAspect = box.dataset.resizableAspect === 'keep';
@@ -239,15 +224,6 @@ export function setResizableBoxEvents(
         min: {},
         max: {},
     };
-    if (form) {
-        form.addEventListener('submit', (e) => e.preventDefault());
-        if (form.elements['y'].value) {
-            box.style.top = `${form.elements['y'].value}px`;
-            box.style.left = `${form.elements['x'].value}px`;
-            box.style.width = `${form.elements['w'].value}px`;
-            box.style.height = `${form.elements['h'].value}px`;
-        }
-    }
 
     handles.forEach((handle) => {
         handle.addEventListener(
@@ -293,15 +269,6 @@ export function setResizableBoxEvents(
                     e.preventDefault();
                     delete container.dataset.draggingWithin;
                     delete box.dataset.dragging;
-
-                    if (form) {
-                        // Save box dimensions
-                        form.elements['y'].value = box.offsetTop;
-                        form.elements['x'].value = box.offsetLeft;
-                        form.elements['w'].value = box.offsetWidth;
-                        form.elements['h'].value = box.offsetHeight;
-                        form.requestSubmit();
-                    }
 
                     container.removeEventListener('pointerup', handlePointerUp);
                     container.removeEventListener('pointermove', handleMove);
