@@ -1,18 +1,12 @@
-import { setResizableBoxEvents } from './index.js';
+import { setResizableBoxEvents, createDocumentWireframe, makeWireframeElementResizable } from './index.js';
 
 function init() {
-    const boxes = document.querySelectorAll('[data-resizable]');
-    for (const box of boxes) {
-        const container =
-            box.dataset.resizableContainer &&
-            document.getElementById(box.dataset.resizableContainer);
+    const [wire1, wire2] = createDocumentWireframe('#box1, #box2');
 
-        const form =
-            box.dataset.resizableForm &&
-            document.getElementById(box.dataset.resizableForm);
+    makeWireframeElementResizable(wire1);
+    makeWireframeElementResizable(wire2, { container: 'stage', resize: 'corners' });
 
-        setResizableBoxEvents(box, { container, form });
-    }
+    setResizableBoxEvents(document.getElementById('box3'));
 }
 
 /**

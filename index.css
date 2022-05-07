@@ -12,14 +12,14 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
     app-region: no-drag; */
 }
 
-.resizable-box {
+[data-resizable] {
     --box-color: hsl(214, 100%, 50%);
     position: absolute;
     outline: 1px solid var(--box-color);
     cursor: move;
 }
 
-.resizable-box-handle {
+[data-handle] {
     --handle-width: 13px;
     --handle-height: 13px;
     color: var(--box-color);

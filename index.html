@@ -10,9 +10,28 @@
 <body>
     <section class="stage" id="stage">
 
-        <div class="resizable-box" data-resizable data-resizable-form="form" id="box1">
+        <div id="box1" class="comp">
+            <p class="content">
+                BOX 1 <br>
+                Container: BODY <br>
+                Wireframe
+            </p>
+        </div>
+
+        <div id="box2" data-resizable-container="stage" class="comp">
+            <p class="content">
+                BOX 2 <br>
+                Container: STAGE <br>
+                Wireframe
+            </p>
+        </div>
+
+
+        <div class="resizable-box" data-resizable data-resizable-form="form" id="box3" class="comp">
             <div class="content">
-                Container: BODY
+                BOX 3 <br>
+                Container: BODY <br>
+                No Wireframe
             </div>
             <div class="resizable-box-handle" data-handle="top-left"></div>
             <div class="resizable-box-handle" data-handle="top-right"></div>
@@ -26,16 +45,6 @@
             <input form="form" type="hidden" name="y"></input>
             <input form="form" type="hidden" name="w"></input>
             <input form="form" type="hidden" name="h"></input>
-        </div>
-
-        <div class="resizable-box" data-resizable data-resizable-container="stage" id="box2">
-            <div class="content">
-                Container: STAGE
-            </div>
-            <div class="resizable-box-handle" data-handle="top-left"></div>
-            <div class="resizable-box-handle" data-handle="top-right"></div>
-            <div class="resizable-box-handle" data-handle="bottom-left"></div>
-            <div class="resizable-box-handle" data-handle="bottom-right"></div>
         </div>
 
     </section>
