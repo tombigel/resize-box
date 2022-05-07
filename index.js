@@ -175,6 +175,7 @@ export function makeWireframeElementResizable(
     }
 
     if (form) {
+        wire.dataset.resizableForm = form;
         wire.innerHTML += `
 <input form="${form}" type="hidden" name="x"></input>
 <input form="${form}" type="hidden" name="y"></input>
