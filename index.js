@@ -256,7 +256,6 @@ export function setResizableBoxEvents(
                 const corner = event.target.dataset.handle || '';
                 const handleMove = moveBox.bind(null, box, corner, rects, onMove);
 
-                document.body.dataset.draggingWithin = 'true';
                 container.dataset.draggingWithin = 'true';
                 box.dataset.dragging = 'true';
 
