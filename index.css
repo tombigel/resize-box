@@ -1,9 +1,9 @@
 
  /* Prevent drag, I think it works...
 https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
-*,
-*::after,
-*::before {
+[data-dragging-within] *,
+[data-dragging-within] *::after,
+[data-dragging-within] *::before {
     -webkit-user-select: none;
     -webkit-user-drag: none;
     -webkit-app-region: no-drag;
