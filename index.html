@@ -4,35 +4,42 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <!-- CSS is imported via demo/main.ts -->
+    <title>Resize Box Demo</title>
 </head>
 <body>
-    <section class="stage" id="stage">
+    <h1>Resize Box Demo</h1>
+    <p>This demo showcases the features of the `resize-box` library, allowing elements to be dragged and resized.</p>
 
-        <div id="box1" class="comp">
-            <p class="content">
-                BOX 1 <br>
-                Container: BODY <br>
-                Wireframe
-            </p>
-        </div>
+    <div class="demo-container">
+        <section class="stage" id="stage">
+            <p>STAGE CONTAINER</p>
+            <div id="box1" class="comp">
+                <p class="content">
+                    BOX 1 <br>
+                    Container: BODY <br>
+                    Wireframe
+                </p>
+            </div>
 
-        <div id="box2" data-resizable-container="stage" class="comp">
-            <p class="content">
-                BOX 2 <br>
-                Container: STAGE <br>
-                Wireframe
-            </p>
-        </div>
+            <div id="box2" data-resizable-container="stage" class="comp">
+                <p class="content">
+                    BOX 2 <br>
+                    Container: STAGE <br>
+                    Wireframe
+                </p>
+            </div>
+        </section>
 
-
-        <div class="resizable-box" data-resizable data-resizable-form="form" id="box3" class="comp">
+        <!-- Box 3 moved out of non-staged-area -->
+        <div class="resizable-box comp" id="box3">
             <div class="content">
                 BOX 3 <br>
                 Container: BODY <br>
-                No Wireframe
+                No Wireframe (Direct Element)
             </div>
+            <!-- Handles will be added by makeWireframeElementResizable if needed, -->
+            <!-- or manually added here and initialized with setResizableBoxEvents -->
             <div class="resizable-box-handle" data-handle="top-left"></div>
             <div class="resizable-box-handle" data-handle="top-right"></div>
             <div class="resizable-box-handle" data-handle="bottom-left"></div>
@@ -42,10 +49,16 @@
             <div class="resizable-box-handle" data-handle="bottom"></div>
             <div class="resizable-box-handle" data-handle="left"></div>
         </div>
+    </div>
 
-    </section>
-    <aside>Code: <a href="https://github.com/tombigel/resize-box">https://github.com/tombigel/resize-box</a></aside>
+    <footer>
+        Code: <a href="https://github.com/tombigel/resize-box" target="_blank">GitHub</a> |
+        License: <a href="https://github.com/tombigel/resize-box/blob/main/LICENSE" target="_blank">MIT</a> |
+        Author: Tom Bigelajzen
+    </footer>
+
     <form name="form" id="form"></form>
-    <script src="./script.js" type="module"></script>
+    <!-- Vite entry point -->
+    <script type="module" src="/demo/main.ts"></script>
 </body>
 </html>
