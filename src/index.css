@@ -1,0 +1,121 @@
+/* Prevent drag, I think it works...
+https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
+[data-dragging-within] *,
+[data-dragging-within] *::after,
+[data-dragging-within] *::before {
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+    user-select: none;
+    /* user-drag: none;
+    app-region: no-drag; */
+}
+
+[data-resizable] {
+    --box-color: hsl(214, 100%, 50%); /* Default, maybe override with theme vars? */
+    position: absolute;
+    /* outline: 1px solid var(--box-color); REMOVED - using border on .comp now */
+    cursor: move;
+    /* Use theme variable for border color during drag */
+    --box-drag-border-color: var(--link-color, hsl(204, 100%, 50%));
+}
+
+[data-handle] {
+    --handle-size: 14px; /* Adjusted size */
+    color: var(--accent-color, hsl(214, 100%, 50%)); /* Use theme accent */
+    position: absolute;
+    width: var(--handle-size);
+    height: var(--handle-size);
+    border-radius: 50%; /* Make them round */
+    background: var(--card-bg, white); /* Use theme card background */
+    margin: calc(var(--handle-size) / -2); /* Adjust margin based on size */
+    box-sizing: border-box;
+    border: 2px solid var(--accent-color, hsl(214, 100%, 50%)); /* Use theme accent for border */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); /* Slightly stronger shadow */
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    z-index: 1; /* Ensure handles are above parent border */
+}
+
+[data-handle]:hover {
+    transform: scale(1.15);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background: var(--accent-color, hsl(214, 100%, 50%)); /* Change background on hover */
+    border-color: var(--card-bg, white); /* Change border on hover */
+}
+
+[data-dragging-within] {
+    cursor: grabbing;
+}
+
+[data-dragging] {
+    z-index: 1;
+    /* --box-color: var(--box-drag-border-color); REMOVED - using border */
+    /* Use box-shadow to indicate dragging instead of outline/border color change */
+    box-shadow: 0 4px 15px var(--card-shadow, rgba(0,0,0,0.1)), 0 0 0 2px var(--box-drag-border-color);
+}
+
+[data-handle*="top"] {
+    top: 0;
+}
+:where([data-handle*="top"]) {
+    left: 50%;
+    cursor: n-resize;
+}
+
+[data-handle*="left"] {
+    left: 0;
+}
+:where([data-handle*="left"]) {
+    top: 50%;
+    cursor: w-resize
+}
+
+[data-handle*="bottom"] {
+    top: 100%;
+}
+:where([data-handle*="bottom"]) {
+    left: 50%;
+    cursor: s-resize;
+}
+
+[data-handle*="right"] {
+    left: 100%;
+}
+:where([data-handle*="right"]) {
+    top: 50%;
+    cursor: e-resize;
+}
+
+[data-handle*="top"][data-handle*="left"] {
+    cursor: nw-resize;
+}
+
+[data-handle*="top"][data-handle*="right"] {
+    cursor: ne-resize;
+}
+
+[data-handle*="bottom"][data-handle*="right"] {
+    cursor: se-resize;
+}
+
+[data-handle*="bottom"][data-handle*="left"] {
+    cursor: sw-resize;
+}
+
+/* Wireframe styles */
+.wireframe-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; /* Adjust as needed if parent isn't the intended boundary */
+    height: 100%; /* Adjust as needed */
+    pointer-events: none; /* Layer doesn't capture events */
+    z-index: 10; /* Ensure layer is above content but potentially below other UI */
+}
+
+.wireframe-layer-item {
+    position: absolute; /* Positioned within the layer */
+    pointer-events: auto; /* Items *do* capture events */
+    /* Outline/background can be added for debugging if needed */
+    /* outline: 1px dashed red; */
+}
