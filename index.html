@@ -4,31 +4,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Link core CSS -->
-    <!-- Link demo-specific CSS -->
+    <!-- CSS is imported via demo/main.ts -->
     <title>Resize Box Demo</title>
-  <script type="module" crossorigin src="/assets/index-B4cE5vkm.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-B4EyDU8X.css">
+  <script type="module" crossorigin src="/assets/index-B-0njaSj.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-8SwRM5qD.css">
 </head>
 <body>
     <h1>Resize Box Demo</h1>
-    <section class="stage" id="stage">
-        <div id="box1" class="comp">
-            <p class="content">
-                BOX 1 <br>
-                Container: BODY <br>
-                Wireframe (Resize All)
-            </p>
-        </div>
+    <p>This demo showcases the features of the `resize-box` library, allowing elements to be dragged and resized.</p>
 
-        <div id="box2" class="comp">
-            <p class="content">
-                BOX 2 <br>
-                Container: STAGE <br>
-                Wireframe (Resize Corners Only)
-            </p>
-        </div>
+    <div class="demo-container">
+        <section class="stage" id="stage">
+            <p>STAGE CONTAINER</p>
+            <div id="box1" class="comp">
+                <p class="content">
+                    BOX 1 <br>
+                    Container: BODY <br>
+                    Wireframe
+                </p>
+            </div>
 
+            <div id="box2" data-resizable-container="stage" class="comp">
+                <p class="content">
+                    BOX 2 <br>
+                    Container: STAGE <br>
+                    Wireframe
+                </p>
+            </div>
+        </section>
+
+        <!-- Box 3 moved out of non-staged-area -->
         <div class="resizable-box comp" id="box3">
             <div class="content">
                 BOX 3 <br>
@@ -46,10 +51,15 @@
             <div class="resizable-box-handle" data-handle="bottom"></div>
             <div class="resizable-box-handle" data-handle="left"></div>
         </div>
+    </div>
 
-    </section>
-    <aside>Code: <a href="https://github.com/tombigel/resize-box" target="_blank">https://github.com/tombigel/resize-box</a></aside>
+    <footer>
+        Code: <a href="https://github.com/tombigel/resize-box" target="_blank">GitHub</a> |
+        License: <a href="https://github.com/tombigel/resize-box/blob/main/LICENSE" target="_blank">MIT</a> |
+        Author: Tom Bigelajzen
+    </footer>
 
+    <form name="form" id="form"></form>
     <!-- Vite entry point -->
 </body>
 </html>
