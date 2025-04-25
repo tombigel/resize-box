@@ -1,0 +1,68 @@
+{
+  "name": "resize-box",
+  "version": "1.0.0",
+  "description": "A Basic Drag and Resize code for HTML components",
+  "type": "module",
+  "main": "./dist/resize-box.umd.js",
+  "module": "./dist/resize-box.es.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/resize-box.es.js",
+      "require": "./dist/resize-box.umd.js"
+    },
+    "./index.css": "./dist/index.css"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "directories": {
+    "example": "demo"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run clean && npm run build:lib && npm run build:types && npm run build:demo && npm run copy:css",
+    "build:lib": "vite build --config vite.lib.config.ts",
+    "build:types": "tsc -p tsconfig.types.json",
+    "build:demo": "vite build",
+    "clean": "rimraf dist build",
+    "copy:css": "cp src/index.css dist/index.css",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "test:watch": "vitest",
+    "coverage": "vitest run --coverage",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "predeploy": "npm run build:demo",
+    "deploy": "gh-pages -d build",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "prepublishOnly": "npm run clean && npm run build:lib && npm run build:types && npm run copy:css",
+    "publish-and-deploy": "npm run version:patch && git push --follow-tags origin main && npm publish --dry-run && npm run deploy"
+  },
+  "keywords": [
+    "resize",
+    "drag"
+  ],
+  "author": "Tom Bigelajzen",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "@types/semver": "^7.7.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.0",
+    "@typescript-eslint/parser": "^8.31.0",
+    "eslint": "^9.25.1",
+    "gh-pages": "^6.3.0",
+    "jsdom": "^26.1.0",
+    "rimraf": "^6.0.1",
+    "semver": "^7.7.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.3",
+    "vite-plugin-dts": "^4.5.3",
+    "vitest": "^3.1.2"
+  }
+}
