@@ -1,6 +1,6 @@
 {
   "name": "resize-box",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A Basic Drag and Resize code for HTML components",
   "type": "module",
   "main": "./dist/resize-box.umd.js",
