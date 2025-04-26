@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS is imported via demo/main.ts -->
     <title>Resize Box Demo</title>
-  <script type="module" crossorigin src="/assets/index-B-0njaSj.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-8SwRM5qD.css">
+  <script type="module" crossorigin src="/assets/index-DihRYtUw.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DtRJCD-K.css">
 </head>
 <body>
     <h1>Resize Box Demo</h1>
@@ -28,29 +28,59 @@
                 <p class="content">
                     BOX 2 <br>
                     Container: STAGE <br>
-                    Wireframe
+                    Wireframe (Resize Only - Corners)
                 </p>
             </div>
+
+            <!-- Moved Box 3 inside the stage -->
+            <div class="resizable-box comp" id="box3">
+                <div class="content">
+                    BOX 3 <br>
+                    Container: BODY <br>
+                    No Wireframe (Direct Element)
+                </div>
+                <!-- Handles will be added by makeWireframeElementResizable if needed, -->
+                <!-- or manually added here and initialized with setResizableBoxEvents -->
+                <div class="resizable-box-handle" data-handle="top-left"></div>
+                <div class="resizable-box-handle" data-handle="top-right"></div>
+                <div class="resizable-box-handle" data-handle="bottom-left"></div>
+                <div class="resizable-box-handle" data-handle="bottom-right"></div>
+                <div class="resizable-box-handle" data-handle="top"></div>
+                <div class="resizable-box-handle" data-handle="right"></div>
+                <div class="resizable-box-handle" data-handle="bottom"></div>
+                <div class="resizable-box-handle" data-handle="left"></div>
+            </div>
+
+            <!-- New Box 4: Drag Only -->
+            <div id="box4" class="comp">
+                <p class="content">
+                    BOX 4 <br>
+                    Container: STAGE <br>
+                    Wireframe (Draggable Only)
+                </p>
+            </div>
+
+            <!-- New Box 5: Specific Handles + Aspect Ratio -->
+            <div id="box5" class="comp">
+                <p class="content">
+                    BOX 5 <br>
+                    Container: STAGE <br>
+                    Wireframe (Resize Only, Aspect Ratio, Constrained)
+                </p>
+            </div>
+
+            <!-- New Box 6: Invert on Edge -->
+            <div id="box6" class="comp">
+                <p class="content">
+                    BOX 6 <br>
+                    Container: STAGE <br>
+                    Wireframe (Inverts on Edge)
+                </p>
+            </div>
+
         </section>
 
-        <!-- Box 3 moved out of non-staged-area -->
-        <div class="resizable-box comp" id="box3">
-            <div class="content">
-                BOX 3 <br>
-                Container: BODY <br>
-                No Wireframe (Direct Element)
-            </div>
-            <!-- Handles will be added by makeWireframeElementResizable if needed, -->
-            <!-- or manually added here and initialized with setResizableBoxEvents -->
-            <div class="resizable-box-handle" data-handle="top-left"></div>
-            <div class="resizable-box-handle" data-handle="top-right"></div>
-            <div class="resizable-box-handle" data-handle="bottom-left"></div>
-            <div class="resizable-box-handle" data-handle="bottom-right"></div>
-            <div class="resizable-box-handle" data-handle="top"></div>
-            <div class="resizable-box-handle" data-handle="right"></div>
-            <div class="resizable-box-handle" data-handle="bottom"></div>
-            <div class="resizable-box-handle" data-handle="left"></div>
-        </div>
+        <!-- Box 3 moved into stage -->
     </div>
 
     <footer>
