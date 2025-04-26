@@ -1,4 +1,4 @@
-import type { HandleName, MakeWireframeResizableOptions, Rects, ResizableBoxOptions, ResizeHandlesOption } from './types';
+import type { HandleName, MakeWireframeResizableOptions, Rects, ResizableBoxOptions } from './types';
 import { clamp, randomId } from './utils';
 
 const dragObserver = new MutationObserver((mutationList, observer) => {
