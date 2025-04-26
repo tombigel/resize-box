@@ -19,10 +19,4 @@ export default defineConfig({
   server: {
     open: '/', // Automatically open the demo page
   },
-  test: {
-    // Vitest configuration (can also be in vitest.config.ts)
-    globals: true,
-    environment: 'jsdom', // Simulate DOM environment for tests
-    setupFiles: './tests/setup.ts', // Optional setup file
-  },
 });

@@ -10,7 +10,7 @@
     ".": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/resize-box.es.js",
-      "require": "./dist/resize-box.umd.js"
+      "require": "./dist/resize-box.cjs.js"
     },
     "./index.css": "./dist/index.css"
   },
@@ -23,10 +23,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "npm run clean && npm run build:lib && npm run build:types && npm run build:demo && npm run copy:css",
+    "build": "npm run clean && npm run build:lib && npm run build:types && vite build && npm run copy:css",
     "build:lib": "vite build --config vite.lib.config.ts",
     "build:types": "tsc -p tsconfig.types.json",
-    "build:demo": "vite build",
     "clean": "rimraf dist build",
     "copy:css": "cp src/index.css dist/index.css",
     "preview": "vite preview",
@@ -34,15 +33,16 @@
     "test:ui": "vitest --ui",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "ESLINT_USE_FLAT_CONFIG=false eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "typecheck": "tsc --noEmit",
-    "predeploy": "GITHUB_PAGES=true npm run build:demo",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "version": "git add .",
     "version:patch": "npm version patch",
     "version:minor": "npm version minor",
     "version:major": "npm version major",
     "prepublishOnly": "npm run clean && npm run build:lib && npm run build:types && npm run copy:css",
-    "publish-and-deploy": "npm run version:patch && git push --follow-tags origin main && npm publish --dry-run && npm run deploy"
+    "release": "npm run version:patch && git push --follow-tags origin main && npm publish && npm run deploy"
   },
   "keywords": [
     "resize",
@@ -50,6 +50,14 @@
   ],
   "author": "Tom Bigelajzen",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tombigel/resize-box.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tombigel/resize-box/issues"
+  },
+  "homepage": "https://tombigel.github.io/resize-box/",
   "devDependencies": {
     "@types/node": "^22.15.2",
     "@types/semver": "^7.7.0",

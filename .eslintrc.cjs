@@ -1,13 +1,20 @@
 module.exports = {
-  root: true,
-  env: { browser: true, es2020: true, node: true },
+  env: {
+    browser: true,
+    es2020: true,
+    node: true,
+  },
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     // Add any other plugins like prettier if used
   ],
-  ignorePatterns: ['dist', 'build', '.eslintrc.cjs', 'vite*.config.ts', 'scripts/*.ts'],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'build', 'node_modules'],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+  },
   plugins: [
     // Add any other plugins like react-refresh if used
     '@typescript-eslint'
