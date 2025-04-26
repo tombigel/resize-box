@@ -1,18 +1,5 @@
-const S4 = (): string => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
-const randomUUIDDumbPolyfill = (): string => `${S4()}${S4()}-${S4()}-${S4()}-${S4()}-${S4()}${S4()}${S4()}`;
-const randomId = (): string => crypto.randomUUID?.() || randomUUIDDumbPolyfill();
-
-/**
- * Limit a number between 2 values, inclusive, order doesn't matter
- * @param {number} n1
- * @param {number} n2
- * @param {number} n3
- * @returns {number}
- */
-export const clamp = (n1: number, n2: number = n1, n3: number = n2): number => {
-    const [min, num, max] = [n1, n2, n3].sort((a, b) => a - b);
-    return Math.min(max, Math.max(min, num));
-};
+import type { HandleName, MakeWireframeResizableOptions, Rects, ResizableBoxOptions, ResizeHandlesOption } from './types';
+import { clamp, randomId } from './utils';
 
 const dragObserver = new MutationObserver((mutationList, observer) => {
     mutationList.forEach((mutation) => {
@@ -116,15 +103,6 @@ export function createDocumentWireframe(elementsListOrSelector: HTMLElement[] | 
     return wires;
 }
 
-export type HandleName = 'top' | 'left' | 'bottom' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-export type ResizeHandlesOption = 'all' | 'sides' | 'corners' | 'none' | HandleName[];
-
-export interface MakeWireframeResizableOptions extends ResizableBoxOptions {
-    handles?: ResizeHandlesOption;
-    keepAspectRatio?: boolean;
-    container?: string;
-}
-
 /**
  * Make a wireframe element resizable
  * @param {HTMLElement|string} wireElementOrId the wireframe box to resize
@@ -184,29 +162,6 @@ export function makeWireframeElementResizable(
     }
 
     setResizableBoxEvents(wire, { keepAspectRatio, ...rest });
-}
-
-export interface ResizableBoxOptions {
-    minWidth?: number;
-    minHeight?: number;
-    maxWidth?: number;
-    maxHeight?: number;
-    draggable?: boolean;
-    keepAspectRatio?: boolean;
-    invertOnContainerEdge?: boolean;
-    onStart?: (e: PointerEvent) => void;
-    onMove?: (e: PointerEvent) => void;
-    onEnd?: (e: PointerEvent) => void;
-}
-
-interface Rects {
-    container: DOMRect;
-    parent: DOMRect;
-    initial: { top: number; left: number; width: number; height: number };
-    diff: { left: number; top: number };
-    start: { left: number; top: number };
-    min: { width: number; height: number };
-    max: { width: number; height: number };
 }
 
 /**

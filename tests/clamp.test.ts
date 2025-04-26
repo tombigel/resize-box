@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { clamp } from '@/index'; // Import from source using alias
+import { clamp } from '@/utils'; // Import from source using alias
 
 describe('clamp function', () => {
   it('should return the number if it is within the bounds', () => {
