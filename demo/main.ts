@@ -8,36 +8,67 @@ function initResizableBoxes() {
     const box2 = document.getElementById('box2') as HTMLElement | null;
     const box3 = document.getElementById('box3') as HTMLElement | null;
     const stage = document.getElementById('stage') as HTMLElement | null;
+    const box4 = document.getElementById('box4') as HTMLElement | null;
+    const box5 = document.getElementById('box5') as HTMLElement | null;
+    const box6 = document.getElementById('box6') as HTMLElement | null;
 
-    if (!box1 || !box2 || !box3 || !stage) {
+    if (!box1 || !box2 || !box3 || !box4 || !box5 || !box6 || !stage) {
         console.error("Demo elements not found!");
         return;
     }
 
-    const [wire1, wire2] = createDocumentWireframe([box1, box2]);
+    const [wire1, wire2, wire4, wire5, wire6] = createDocumentWireframe([box1, box2, box4, box5, box6]);
 
     makeWireframeElementResizable(wire1, {
-        resize: 'all',
+        handles: 'all',
+        draggable: true,
         onStart: () => console.log('Wire1 Start'),
         onMove: () => console.log('Wire1 Move'),
         onEnd: () => console.log('Wire1 End'),
+        invertOnContainerEdge: true,
     });
 
     makeWireframeElementResizable(wire2, {
         container: 'stage',
-        resize: 'corners',
+        handles: 'corners',
+        draggable: false,
+        invertOnContainerEdge: false,
         minWidth: 50,
         minHeight: 50,
-        maxWidth: stage.offsetWidth - 20,
-        maxHeight: stage.offsetHeight - 20,
+        maxWidth: stage.offsetWidth,
+        maxHeight: stage.offsetHeight,
     });
 
     setResizableBoxEvents(box3, {
+        draggable: true,
+        keepAspectRatio: false,
         minWidth: 100,
         minHeight: 50,
         onStart: () => console.log('Box3 Start'),
         onMove: () => console.log('Box3 Move'),
         onEnd: () => console.log('Box3 End'),
+    });
+
+    makeWireframeElementResizable(wire4, {
+        container: 'stage',
+        handles: 'none',
+        draggable: true,
+    });
+
+    makeWireframeElementResizable(wire5, {
+        container: 'stage',
+        handles: ['top-left', 'bottom-right'],
+        draggable: false,
+        keepAspectRatio: true,
+        minWidth: 40,
+        minHeight: 40,
+    });
+
+    makeWireframeElementResizable(wire6, {
+        container: 'stage',
+        handles: 'all',
+        draggable: true,
+        invertOnContainerEdge: true,
     });
 }
 

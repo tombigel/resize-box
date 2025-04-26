@@ -116,11 +116,13 @@ export function createDocumentWireframe(elementsListOrSelector: HTMLElement[] | 
     return wires;
 }
 
-export type ResizeHandleType = 'all' | 'sides' | 'corners' | 'corners-aspect';
+export type HandleName = 'top' | 'left' | 'bottom' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+export type ResizeHandlesOption = 'all' | 'sides' | 'corners' | 'none' | HandleName[];
 
 export interface MakeWireframeResizableOptions extends ResizableBoxOptions {
-    resize?: ResizeHandleType;
-    container?: string; // container element ID
+    handles?: ResizeHandlesOption;
+    keepAspectRatio?: boolean;
+    container?: string;
 }
 
 /**
@@ -131,9 +133,10 @@ export interface MakeWireframeResizableOptions extends ResizableBoxOptions {
 export function makeWireframeElementResizable(
     wireElementOrId: HTMLElement | string,
     {
-        resize = 'all',
+        handles = 'all',
         container,
-        ...rest // Captures ResizableBoxOptions
+        keepAspectRatio = false,
+        ...rest // Captures ResizableBoxOptions (including draggable)
     }: MakeWireframeResizableOptions = {}
 ): void {
     const wire = typeof wireElementOrId === 'string' ? document.getElementById(wireElementOrId) : wireElementOrId;
@@ -154,38 +157,43 @@ export function makeWireframeElementResizable(
         wire.dataset.resizableContainer = container;
     }
 
-    // Clear existing handles before adding new ones
     wire.innerHTML = '';
 
-    if (['all', 'sides'].includes(resize)) {
-        wire.innerHTML += `
-<div class="resizable-box-handle" data-handle="top"></div>
-<div class="resizable-box-handle" data-handle="right"></div>
-<div class="resizable-box-handle" data-handle="bottom"></div>
-<div class="resizable-box-handle" data-handle="left"></div>`;
-    }
+    let handlesToAdd: HandleName[] = [];
+    const allSides: HandleName[] = ['top', 'right', 'bottom', 'left'];
+    const allCorners: HandleName[] = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
 
-    if (['all', 'corners', 'corners-aspect'].includes(resize)) {
-        wire.innerHTML += `
-<div class="resizable-box-handle" data-handle="top-left"></div>
-<div class="resizable-box-handle" data-handle="top-right"></div>
-<div class="resizable-box-handle" data-handle="bottom-left"></div>
-<div class="resizable-box-handle" data-handle="bottom-right"></div>`;
-    }
+    if (handles === 'all') {
+        handlesToAdd = [...allSides, ...allCorners];
+    } else if (handles === 'sides') {
+        handlesToAdd = [...allSides];
+    } else if (handles === 'corners') {
+        handlesToAdd = [...allCorners];
+    } else if (Array.isArray(handles)) {
+        handlesToAdd = handles;
+    } // 'none' or other invalid string results in no handles
 
-    if (resize === 'corners-aspect') {
+    handlesToAdd.forEach(handleName => {
+        wire.innerHTML += `<div class="resizable-box-handle" data-handle="${handleName}"></div>`;
+    });
+
+    if (keepAspectRatio) {
         wire.dataset.resizableAspect = 'keep';
+    } else {
+        delete wire.dataset.resizableAspect;
     }
 
-    setResizableBoxEvents(wire, rest);
+    setResizableBoxEvents(wire, { keepAspectRatio, ...rest });
 }
-
 
 export interface ResizableBoxOptions {
     minWidth?: number;
     minHeight?: number;
     maxWidth?: number;
     maxHeight?: number;
+    draggable?: boolean;
+    keepAspectRatio?: boolean;
+    invertOnContainerEdge?: boolean;
     onStart?: (e: PointerEvent) => void;
     onMove?: (e: PointerEvent) => void;
     onEnd?: (e: PointerEvent) => void;
@@ -209,19 +217,49 @@ interface Rects {
  */
 export function setResizableBoxEvents(
     box: HTMLElement,
-    { minWidth = 10, minHeight = 10, maxWidth, maxHeight, onStart, onMove, onEnd }: ResizableBoxOptions = {}
+    {
+        minWidth = 10,
+        minHeight = 10,
+        maxWidth,
+        maxHeight,
+        draggable = true,
+        keepAspectRatio = false,
+        invertOnContainerEdge = false,
+        onStart,
+        onMove,
+        onEnd
+    }: ResizableBoxOptions = {}
 ): void {
     const container = document.getElementById(box.dataset.resizableContainer || '') || document.body;
 
-    //TODO - implement aspect ratio locking
-    const keepAspect = box.dataset.resizableAspect === 'keep';
-    const initialAspectRatio = keepAspect ? box.offsetWidth / box.offsetHeight : 0;
+    // Set data attribute based on draggable option for CSS cursor styling
+    if (!draggable) {
+        box.dataset.resizableDraggable = 'false';
+    } else {
+        // Ensure attribute is removed if it was set previously and draggable is now true
+        delete box.dataset.resizableDraggable;
+    }
+
+    // Set data attribute for inversion behavior
+    if (invertOnContainerEdge) {
+        box.dataset.resizableInvert = 'invert';
+    } else {
+        delete box.dataset.resizableInvert;
+    }
+
+    // Aspect ratio check (reads from option OR data attribute)
+    const shouldKeepAspect = keepAspectRatio || box.dataset.resizableAspect === 'keep';
+    const initialAspectRatio = shouldKeepAspect ? box.offsetWidth / box.offsetHeight : 0;
 
     maxWidth = maxWidth ?? container.offsetWidth;
     maxHeight = maxHeight ?? container.offsetHeight;
 
-    // Include the box itself for dragging
-    const handles: HTMLElement[] = [...box.querySelectorAll<HTMLElement>('[data-handle]'), box];
+    // Conditionally include the box for dragging
+    const handleElements: HTMLElement[] = [...box.querySelectorAll<HTMLElement>('[data-handle]')];
+    if (draggable) {
+        handleElements.push(box);
+    }
+
     const parent = box.offsetParent as HTMLElement | null;
 
     if (!parent || !container.contains(parent)) {
@@ -240,7 +278,7 @@ export function setResizableBoxEvents(
         max: { width: maxWidth, height: maxHeight }, // Use resolved max values
     };
 
-    handles.forEach((handle) => {
+    handleElements.forEach((handle) => {
         handle.addEventListener(
             'pointerdown',
             (event: PointerEvent) => {
@@ -270,7 +308,8 @@ export function setResizableBoxEvents(
                 };
 
                 const corner = target.dataset.handle || ''; // Empty string means dragging the box itself
-                const handleMove = moveBox.bind(null, box, corner, rects, onMove, keepAspect, initialAspectRatio);
+                // Pass aspect ratio info and edge behavior option to moveBox
+                const handleMove = moveBox.bind(null, box, corner, rects, onMove, shouldKeepAspect, initialAspectRatio, invertOnContainerEdge);
 
                 container.dataset.draggingWithin = 'true';
                 box.dataset.dragging = 'true';
@@ -309,21 +348,54 @@ function moveBox(
     corner: string,
     rects: Rects,
     onMove: ((e: PointerEvent) => void) | undefined,
-    keepAspect: boolean,
+    shouldKeepAspect: boolean,
     aspectRatio: number,
+    invertOnContainerEdge: boolean,
     event: PointerEvent
 ): void {
     // Use pointer position relative to the document (clientX/clientY)
     const currentX = event.clientX;
     const currentY = event.clientY;
-    const deltaX = currentX - rects.start.left;
-    const deltaY = currentY - rects.start.top;
+
+    const startLeft = typeof rects.start.left === 'number' ? rects.start.left : currentX;
+    const startTop = typeof rects.start.top === 'number' ? rects.start.top : currentY;
+    // Use let instead of const for delta values
+    let deltaX = currentX - startLeft;
+    let deltaY = currentY - startTop;
 
     let { top, left, width, height } = { ...rects.initial }; // Work with copies
 
     event.preventDefault();
 
-    // Calculate new dimensions/position based on the corner being dragged
+    // --- Optional: Clamp Delta based on Container Edges ---
+    if (!invertOnContainerEdge && corner) {
+        // Available space from the box edges to the container edges
+        // Note: rects.diff accounts for the offsetParent's position relative to the container
+        const spaceLeft = rects.initial.left + rects.diff.left;
+        const spaceRight = rects.container.width - (rects.initial.left + rects.initial.width + rects.diff.left);
+        const spaceTop = rects.initial.top + rects.diff.top;
+        const spaceBottom = rects.container.height - (rects.initial.top + rects.initial.height + rects.diff.top);
+
+        if (corner.includes('left')) {
+            // Limit how far left the pointer can go (negative deltaX)
+            deltaX = Math.max(deltaX, -spaceLeft);
+        }
+        if (corner.includes('right')) {
+            // Limit how far right the pointer can go (positive deltaX)
+            deltaX = Math.min(deltaX, spaceRight);
+        }
+        if (corner.includes('top')) {
+            // Limit how far up the pointer can go (negative deltaY)
+            deltaY = Math.max(deltaY, -spaceTop);
+        }
+        if (corner.includes('bottom')) {
+            // Limit how far down the pointer can go (positive deltaY)
+            deltaY = Math.min(deltaY, spaceBottom);
+        }
+    }
+    // --- End Delta Clamping ---
+
+    // Calculate new dimensions/position based on the (potentially clamped) delta
     if (corner.includes('top')) {
         top = rects.initial.top + deltaY;
         height = rects.initial.height - deltaY;
@@ -346,7 +418,7 @@ function moveBox(
 
     // --- Aspect Ratio Lock (Basic Implementation) ---
     // TODO: Refine aspect ratio logic, especially when dragging corners
-    if (keepAspect && corner) {
+    if (shouldKeepAspect && corner) {
         if (corner.includes('left') || corner.includes('right')) {
             // Adjust height based on width change
             const newHeight = width / aspectRatio;
@@ -365,35 +437,85 @@ function moveBox(
     }
     // --- End Aspect Ratio ---
 
-    // Clamp dimensions to min/max values
-    width = clamp(rects.min.width, rects.max.width, width);
-    height = clamp(rects.min.height, rects.max.height, height);
+    // --- Final Clamping ---
+    // 1. Clamp dimensions to min/max *options*
+    let clampedWidth = clamp(rects.min.width, rects.max.width, width);
+    let clampedHeight = clamp(rects.min.height, rects.max.height, height);
 
-    // Adjust position if dimensions were clamped during resize
-    if (corner.includes('top') && height !== rects.initial.height - deltaY) {
-        top = rects.initial.top + rects.initial.height - height;
-    }
-    if (corner.includes('left') && width !== rects.initial.width - deltaX) {
-        left = rects.initial.left + rects.initial.width - width;
+    // 2. If aspect ratio locked, ensure clamped dimensions still respect it
+    //    (adjust the dimension that changed *less* proportionally)
+    if (shouldKeepAspect && corner) {
+         const widthRatio = clampedWidth / width; // Proportion of original width remaining after clamp (<=1)
+         const heightRatio = clampedHeight / height; // Proportion of original height remaining after clamp (<=1)
+
+         // Determine which dimension was clamped *more* (smaller ratio means more clamping)
+         if (widthRatio <= heightRatio) {
+             // Width was clamped more (or equally), adjust height based on clamped width
+             clampedHeight = clampedWidth / aspectRatio;
+         } else {
+             // Height was clamped more, adjust width based on clamped height
+             clampedWidth = clampedHeight * aspectRatio;
+         }
+
+         // Re-clamp *both* dimensions after aspect ratio adjustment,
+         // as the secondary adjustment might have pushed the other dimension beyond its limits.
+         clampedWidth = clamp(rects.min.width, rects.max.width, clampedWidth);
+         clampedHeight = clamp(rects.min.height, rects.max.height, clampedHeight);
+
+         // Final check: Ensure the *most* constrained dimension dictates the final size
+         // If clamping happened again, the aspect ratio might be slightly off.
+         // Recalculate the *other* dimension based on the most recent clamped values.
+         const finalWidthBasedOnHeight = clampedHeight * aspectRatio;
+         const finalHeightBasedOnWidth = clampedWidth / aspectRatio;
+
+        // If the current clamped width is smaller than what the clamped height suggests,
+        // it means width is the limiting factor. Adjust height accordingly.
+         if (clampedWidth < finalWidthBasedOnHeight - 0.001) { // Tolerance for floating point
+             clampedHeight = finalHeightBasedOnWidth;
+         }
+         // Otherwise, height is the limiting factor (or they match). Adjust width accordingly.
+         else {
+              clampedWidth = finalWidthBasedOnHeight;
+         }
+
+         // One final clamp as a safety net (values shouldn't change ideally)
+         clampedWidth = clamp(rects.min.width, rects.max.width, clampedWidth);
+         clampedHeight = clamp(rects.min.height, rects.max.height, clampedHeight);
     }
 
-    // Clamp position within the container boundaries
+    // 3. Adjust position if dimensions were clamped during resize
+    //    (Ensure the edge opposite the dragged handle stays put)
+    //    Run this *before* clamping position
+    if (corner.includes('top') && clampedHeight !== height) {
+        top = rects.initial.top + rects.initial.height - clampedHeight;
+    }
+    if (corner.includes('left') && clampedWidth !== width) {
+        left = rects.initial.left + rects.initial.width - clampedWidth;
+    }
+     // Recalculate drag position if aspect ratio/clamping changed dimensions
+     if (!corner) {
+         top = rects.initial.top + deltaY;
+         left = rects.initial.left + deltaX;
+     }
+
+    // 4. Clamp position within the container boundaries *using clamped dimensions*
     const clampedTop = clamp(
-        -rects.diff.top, // Minimum top relative to parent
-        rects.container.height - rects.diff.top - height, // Maximum top relative to parent
+        -rects.diff.top, // Min top relative to parent
+        rects.container.height - rects.diff.top - clampedHeight, // Max top relative to parent
         top
     );
     const clampedLeft = clamp(
-        -rects.diff.left, // Minimum left relative to parent
-        rects.container.width - rects.diff.left - width, // Maximum left relative to parent
+        -rects.diff.left, // Min left relative to parent
+        rects.container.width - rects.diff.left - clampedWidth, // Max left relative to parent
         left
     );
+    // --- End Final Clamping ---
 
     // Apply styles
     box.style.top = `${clampedTop}px`;
     box.style.left = `${clampedLeft}px`;
-    box.style.width = `${width}px`;
-    box.style.height = `${height}px`;
+    box.style.width = `${clampedWidth}px`;
+    box.style.height = `${clampedHeight}px`;
 
     onMove?.(event);
 }

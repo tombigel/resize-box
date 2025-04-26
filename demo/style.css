@@ -13,8 +13,17 @@
     --stage-bg: #f9f9f9;
     --stage-border: #e0e0e0;
     --box-border-color-1: #9b59b6; /* Reference purple */
+    --box-bg-color-1: hsla(283, 39%, 65%, 0.2);
     --box-border-color-2: #e67e22; /* Softer orange */
+    --box-bg-color-2: hsla(28, 80%, 52%, 0.2);
     --box-border-color-3: #2ecc71; /* Softer green */
+    --box-bg-color-3: hsla(145, 63%, 49%, 0.2);
+    --box-border-color-4: var(--accent-color); /* Use accent blue */
+    --box-bg-color-4: hsla(207, 69%, 57%, 0.2);
+    --box-border-color-5: #e83e8c; /* Bootstrap pink */
+    --box-bg-color-5: hsla(332, 81%, 58%, 0.2);
+    --box-border-color-6: #17a2b8; /* Bootstrap info cyan */
+    --box-bg-color-6: hsla(188, 78%, 40%, 0.2);
     --footer-text: var(--text-muted-color);
     --footer-border: var(--border-color);
     --link-color: var(--accent-color);
@@ -33,8 +42,17 @@
         --stage-bg: #333;
         --stage-border: #444;
         --box-border-color-1: #be90d4;
+        --box-bg-color-1: hsla(283, 39%, 67%, 0.25);
         --box-border-color-2: #f39c12;
+        --box-bg-color-2: hsla(37, 90%, 51%, 0.25);
         --box-border-color-3: #2ecc71;
+        --box-bg-color-3: hsla(145, 63%, 49%, 0.25);
+        --box-border-color-4: var(--accent-color);
+        --box-bg-color-4: hsla(207, 69%, 57%, 0.25);
+        --box-border-color-5: #f06292;
+        --box-bg-color-5: hsla(332, 81%, 66%, 0.25);
+        --box-border-color-6: #26c6da;
+        --box-bg-color-6: hsla(188, 78%, 50%, 0.25);
         --footer-text: var(--text-muted-color);
         --footer-border: var(--border-color);
         --link-color: #5dade2;
@@ -142,9 +160,10 @@ footer a:hover {
     background-color: var(--stage-bg);
     border: 1px solid var(--stage-border);
     box-shadow: 0 4px 12px var(--card-shadow);
-    max-width: 700px;
     width: 100%;
+    max-width: 700px;
     margin: 0 auto 2rem auto;
+    min-height: 500px;
 }
 
 .stage > p {
@@ -165,49 +184,88 @@ footer a:hover {
 }
 
 /* --- Resizable Component Styles --- */
+/* Apply transition to both original components and wireframe items */
+.comp,
+.wireframe-layer-item {
+    transition: box-shadow 0.15s ease-out, filter 0.15s ease-out;
+    /* Remove base styles for wireframe visibility */
+    border-radius: 8px;
+    border: 1px solid transparent; /* Invisible border for outline effect */
+}
+
 .comp {
     position: absolute;
     box-sizing: border-box;
-    width: 200px; /* Default width */
-    height: 150px; /* Default height */
-    border: 1px solid; /* Thinner border, color set below */
+    width: 180px;
+    height: 140px;
     background-color: var(--card-bg);
-    box-shadow: 0 4px 8px var(--card-shadow); /* Adjusted shadow */
-    border-radius: 8px; /* Consistent rounding */
+    box-shadow: 0 4px 8px var(--card-shadow);
     color: var(--text-color);
+}
+
+/* Apply drag effect to both */
+.comp[data-dragging="true"],
+.wireframe-layer-item[data-dragging="true"] {
+    filter: brightness(110%); /* Brighten background slightly */
+    /* The box-shadow (including outline) and z-index are already applied by src/index.css */
 }
 
 .comp p.content {
     padding: 1em;
     margin: 0;
-    font-size: 1rem; /* Slightly larger content text */
+    font-size: 1rem;
     line-height: 1.4;
     text-align: center;
     user-select: none;
     color: var(--text-color);
-    height: 100%; /* Make content take full height */
-    box-sizing: border-box; /* Include padding in height */
+    height: 100%;
+    box-sizing: border-box;
 }
 
-/* Specific Box Overrides (Positioning & Border) */
+/* Aligned 3x2 Grid */
 #box1 {
-    top: 80px; /* Adjust positioning within new padding */
+    top: 80px;
     left: 40px;
     border-color: var(--box-border-color-1);
 }
 
 #box2 {
-    top: 300px; /* Adjust positioning within new padding */
-    left: 60px;
+    top: 80px;
+    left: 260px;
     border-color: var(--box-border-color-2);
 }
 
 #box3 {
-    top: 20px; /* Position near top-left of non-staged-area */
-    left: 20px;
+    top: 80px;
+    left: 480px;
     border-color: var(--box-border-color-3);
+}
+
+#box4 {
+    top: 260px;
+    left: 40px;
+    border-color: var(--box-border-color-4);
+}
+
+#box5 {
+    top: 260px;
+    left: 260px;
+    border-color: var(--box-border-color-5);
+}
+
+#box6 {
+    top: 260px;
+    left: 480px;
+    border-color: var(--box-border-color-6);
 }
 
 /* Remove specific #box3 .content rule as it inherits */
 
 /* NOTE: Wireframe styles are primarily handled in src/index.css */
+/* Add specific border colors for wireframes based on original box */
+#wire-box1 { border-color: var(--box-border-color-1); }
+#wire-box2 { border-color: var(--box-border-color-2); }
+/* Box 3 has no wireframe */
+#wire-box4 { border-color: var(--box-border-color-4); }
+#wire-box5 { border-color: var(--box-border-color-5); }
+#wire-box6 { border-color: var(--box-border-color-6); }
