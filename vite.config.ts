@@ -4,7 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   // Define base dynamically based on environment variable for GitHub Pages
-  base: process.env.GITHUB_PAGES ? '/resize-box/' : '/',
+  base: '/resize-box/', // Set base path for GitHub Pages
   plugins: [],
   resolve: {
     alias: {
