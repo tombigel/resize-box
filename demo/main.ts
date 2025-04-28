@@ -1,5 +1,6 @@
 import { setResizableBoxEvents, createDocumentWireframe, makeWireframeElementResizable } from '@/index';
 import '@/index.css';
+import '@/theme.css';
 import './style.css';
 
 // Renamed original init function

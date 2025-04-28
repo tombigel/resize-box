@@ -12,7 +12,8 @@
       "import": "./dist/resize-box.es.js",
       "require": "./dist/resize-box.cjs.js"
     },
-    "./index.css": "./dist/index.css"
+    "./index.css": "./dist/index.css",
+    "./theme.css": "./dist/theme.css"
   },
   "files": [
     "dist",
@@ -27,7 +28,7 @@
     "build:lib": "vite build --config vite.lib.config.ts",
     "build:types": "tsc -p tsconfig.types.json",
     "clean": "rimraf dist build",
-    "copy:css": "cp src/index.css dist/index.css",
+    "copy:css": "cp src/index.css dist/index.css && cp src/theme.css dist/theme.css",
     "preview": "vite preview",
     "test": "vitest run",
     "test:ui": "vitest --ui",
