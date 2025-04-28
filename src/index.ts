@@ -226,6 +226,13 @@ export function setResizableBoxEvents(
                 event.preventDefault();
                 event.stopPropagation();
 
+                // Find the associated component if the box is a wireframe
+                const component = box.dataset.compId ? document.getElementById(box.dataset.compId) : null;
+
+                // Store original z-indices
+                const originalBoxZIndex = box.style.zIndex;
+                const originalComponentZIndex = component ? component.style.zIndex : '';
+
                 rects.container = container.getBoundingClientRect();
                 rects.parent = parent.getBoundingClientRect();
                 rects.initial = {
@@ -249,6 +256,10 @@ export function setResizableBoxEvents(
                 container.dataset.draggingWithin = 'true';
                 box.dataset.dragging = 'true';
                 box.style.willChange = 'top, left, width, height';
+                box.style.zIndex = '1000'; // Set high z-index for dragging box (or wireframe)
+                if (component) {
+                    component.style.zIndex = '999'; // Set slightly lower high z-index for component
+                }
 
                 onStart?.(event);
 
@@ -262,6 +273,10 @@ export function setResizableBoxEvents(
                     delete container.dataset.draggingWithin;
                     delete box.dataset.dragging;
                     box.style.willChange = 'auto';
+                    box.style.zIndex = originalBoxZIndex; // Restore original box z-index
+                    if (component) {
+                        component.style.zIndex = originalComponentZIndex; // Restore original component z-index
+                    }
 
                     container.releasePointerCapture(event.pointerId);
                     container.removeEventListener('pointermove', handleMove);

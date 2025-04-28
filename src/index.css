@@ -29,6 +29,11 @@ https://gist.github.com/msuchodolski/41c9338f3a732379dc570142826ed76e */
     z-index: 1;
 }
 
+/* Hide handles when the parent box is being dragged */
+[data-dragging="true"] > [data-handle] {
+    display: none;
+}
+
 [data-handle*="top"] {
     top: 0;
 }
