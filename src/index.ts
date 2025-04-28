@@ -1,5 +1,6 @@
 import type { HandleName, MakeWireframeResizableOptions, Rects, ResizableBoxOptions } from './types';
 import { clamp, randomId } from './utils';
+export type * from './types';
 
 const dragObserver = new MutationObserver((mutationList, observer) => {
     mutationList.forEach((mutation) => {
