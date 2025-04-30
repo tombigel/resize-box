@@ -38,7 +38,7 @@ jobs:
       # Build the demo app (output to ./build)
       # Set GITHUB_PAGES env var so vite.config.ts sets the correct base path
       - name: Build
-        run: npm run build:demo
+        run: npm run build
         env:
           GITHUB_PAGES: true
       - name: Setup Pages

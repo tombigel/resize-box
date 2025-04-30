@@ -39,11 +39,3 @@ jobs:
       # Use the comprehensive build script which includes lib, types, demo app, and css copy
       - name: Build All
         run: npm run build
-
-      - name: Deploy to GitHub Pages
-        # Only run on pushes to the main branch
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v4 # Use latest version
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build # Directory containing demo app build output
