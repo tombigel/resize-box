@@ -122,3 +122,6 @@ dist
 .history
 *.vsix
 /.vscode/
+
+# Cursor specific files
+.cursor/
