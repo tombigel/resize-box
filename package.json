@@ -3,7 +3,6 @@
   "version": "1.0.9",
   "description": "A Basic Drag and Resize code for HTML components",
   "type": "module",
-  "main": "./dist/resize-box.umd.js",
   "module": "./dist/resize-box.es.js",
   "types": "./dist/types/index.d.ts",
   "exports": {

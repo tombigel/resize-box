@@ -16,8 +16,7 @@ export default defineConfig({
     lib: {
       // Could also be a dictionary or array of multiple entry points
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'ResizeBox', // Global variable name in UMD build
-      formats: ['es', 'umd', 'cjs'],
+      formats: ['es', 'cjs'],
       fileName: (format) => `resize-box.${format}.js`,
     },
     rollupOptions: {
